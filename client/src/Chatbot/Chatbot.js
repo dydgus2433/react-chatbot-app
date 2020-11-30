@@ -1,10 +1,14 @@
 import Axios from "axios";
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { saveMessage } from "../_actions/message_actions";
 
 function Chatbot() {
+  const dispatch = useDispatch();
   useEffect(() => {
     eventQuery("WelcomeToMyWebsite");
   }, []);
+
   const textQuery = async (text) => {
     let conversations = [];
     // First Need to take care of the  message I sent
@@ -17,7 +21,7 @@ function Chatbot() {
       },
     };
     conversations.push(conversation);
-
+    dispatch(saveMessage(conversation));
     //We need to take care of the message Chatbot sent
     const textQueryVariables = {
       text: text,
@@ -36,7 +40,7 @@ function Chatbot() {
         content: content,
       };
 
-      console.log(conversation);
+      dispatch(saveMessage(conversation));
     } catch (error) {
       conversation = {
         who: "bot",
@@ -47,7 +51,7 @@ function Chatbot() {
         },
       };
     }
-    conversations.push(conversation);
+    dispatch(saveMessage(conversation));
   };
 
   const eventQuery = async (event) => {
@@ -71,7 +75,7 @@ function Chatbot() {
         content: content,
       };
 
-      console.log(conversation);
+      dispatch(saveMessage(conversation));
     } catch (error) {
       let conversation = {
         who: "bot",
@@ -82,7 +86,7 @@ function Chatbot() {
         },
       };
 
-      console.log(conversation);
+      dispatch(saveMessage(conversation));
     }
   };
   const keyPressHandler = (e) => {
